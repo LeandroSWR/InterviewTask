@@ -22,7 +22,7 @@ enable it / edit it's text when needed so we don't spam the garbage collector.
 
 ## High Level Checklist
 
-- [ ] Player character capable of walking and interacting with the game world.
+- [X] Player character capable of walking and interacting with the game world.
 - [ ] Functional clothes shop within a top-down view game like Stardew Valley.
 - [ ] Required features: shopkeeper interaction, buying/selling items, item icons,
 item prices, and the ability to equip purchased outfits, which should be
@@ -39,8 +39,8 @@ performance. Attach this as a PDF file to Github.
 
 - [X] Create the readme (In constant update).
 - [X] Create the project.
-- [ ] Create the player movement.
-- [ ] Create a basic interaction system.
+- [X] Create the player movement.
+- [X] Create a basic interaction system.
 - [ ] Add 2D assets to complement the game.
 - [ ] Create the store using UI.
 - [ ] Allow the player to purchase clothes.
