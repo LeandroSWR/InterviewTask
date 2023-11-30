@@ -191,6 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c437aa647647b54c96aaca2384fd731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 5
 --- !u!114 &129718249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 7f163b8d79ad87f4fa15ef1cb53fb9dd, type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: e67518d40ceafcf41ade06ae331f8ee0, type: 3}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -215,10 +216,22 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 1
-  m_DefaultControlScheme: PlayerScheme
-  m_DefaultActionMap: PlayerControls
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fff1ece2-9aa6-4dbc-bdb2-cd0bcdd63acb
+    m_ActionName: PlayerControls/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/DualSenseGamepadHID/dpad/up,/DualSenseGamepadHID1/dpad/up,/DualSenseGamepadHID2/dpad/up,/DualSenseGamepadHID3/dpad/up,/DualSenseGamepadHID4/dpad/up,/DualSenseGamepadHID/dpad/down,/DualSenseGamepadHID1/dpad/down,/DualSenseGamepadHID2/dpad/down,/DualSenseGamepadHID3/dpad/down,/DualSenseGamepadHID4/dpad/down,/DualSenseGamepadHID/dpad/left,/DualSenseGamepadHID1/dpad/left,/DualSenseGamepadHID2/dpad/left,/DualSenseGamepadHID3/dpad/left,/DualSenseGamepadHID4/dpad/left,/DualSenseGamepadHID/dpad/right,/DualSenseGamepadHID1/dpad/right,/DualSenseGamepadHID2/dpad/right,/DualSenseGamepadHID3/dpad/right,/DualSenseGamepadHID4/dpad/right,/DualSenseGamepadHID/leftStick/up,/DualSenseGamepadHID1/leftStick/up,/DualSenseGamepadHID2/leftStick/up,/DualSenseGamepadHID3/leftStick/up,/DualSenseGamepadHID4/leftStick/up,/DualSenseGamepadHID/leftStick/down,/DualSenseGamepadHID1/leftStick/down,/DualSenseGamepadHID2/leftStick/down,/DualSenseGamepadHID3/leftStick/down,/DualSenseGamepadHID4/leftStick/down,/DualSenseGamepadHID/leftStick/left,/DualSenseGamepadHID1/leftStick/left,/DualSenseGamepadHID2/leftStick/left,/DualSenseGamepadHID3/leftStick/left,/DualSenseGamepadHID4/leftStick/left,/DualSenseGamepadHID/leftStick/right,/DualSenseGamepadHID1/leftStick/right,/DualSenseGamepadHID2/leftStick/right,/DualSenseGamepadHID3/leftStick/right,/DualSenseGamepadHID4/leftStick/right]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2ddb0214-589c-4f50-8cd3-367c9b9a8d78
+    m_ActionName: PlayerControls/Interaction[/DualSenseGamepadHID/buttonNorth,/DualSenseGamepadHID1/buttonNorth,/DualSenseGamepadHID2/buttonNorth,/DualSenseGamepadHID3/buttonNorth,/DualSenseGamepadHID4/buttonNorth,/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eeeda88c-52cd-4ebb-9557-7e14d98181d4
+    m_ActionName: PlayerControls/Pause[/DualSenseGamepadHID/start,/DualSenseGamepadHID1/start,/DualSenseGamepadHID2/start,/DualSenseGamepadHID3/start,/DualSenseGamepadHID4/start,/Keyboard/escape]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &519420028
