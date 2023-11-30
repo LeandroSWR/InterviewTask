@@ -12,6 +12,9 @@ public class PlayerInteraction : MonoBehaviour
     Dictionary<IInteractable, GameObject> interactablesInRange;
     private IInteractable closestInteractable;
 
+    // Handle displaying the inertactable note
+    [SerializeField] private GameObject interactCanvas;
+
     private void Start()
     {
         interactablesInRange = new Dictionary<IInteractable, GameObject>();
@@ -22,16 +25,32 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (interactablesInRange.Count == 0)
         {
+            interactCanvas.SetActive(false);
             closestInteractable = null;
             return;
         }
 
         closestInteractable = GetClosestInteractable();
 
-        if (tryInteract && closestInteractable != null)
+        if (closestInteractable == null)
+        {
+            interactCanvas.SetActive(false);
+            return;
+        }
+
+        DisplayInteractCanvas();
+
+        if (tryInteract)
         {
             closestInteractable.Interact();
         }
+    }
+
+    private void DisplayInteractCanvas()
+    {
+        interactCanvas.SetActive(true);
+        interactCanvas.transform.position = closestInteractable.InteractNoteLocation;
+        interactCanvas.GetComponentInChildren<TMPro.TMP_Text>().text = closestInteractable.InteractNoteText;
     }
 
     /// <summary>

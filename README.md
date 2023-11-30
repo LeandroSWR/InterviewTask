@@ -12,7 +12,13 @@ I wanted to first get some code working especially for the player and the
 interactions, so that's what I did, just start with a basic white cube and make
 it move and be able to "interact" with other cubes. For the interaction I wanted
 to make it a bit more complex by checking for the closest interactable object in
-cases where the player might be in range of 2 interactables simultaneously.
+cases where the player might be in range of 2 interactables simultaneously I
+also decided to create a separate interface IInteractable to be able to handle
+multiple different interactables if I need to do so later. I originally wanted
+a prefab of a canvas where some text about how to interact and what that
+interaction was, that I could spawn in and destroy when not needed but thinking
+more about this I decided to have the player keep that canvas to him self and
+enable it / edit it's text when needed so we don't spam the garbage collector.
 
 ## High Level Checklist
 
