@@ -8,6 +8,12 @@ to help gide me trough the creation process and make it easier.
 Keeping in mind that this is an interview project I've decided to write all the
 code from scratch.
 
+I wanted to first get some code working especially for the player and the
+interactions, so that's what I did, just start with a basic white cube and make
+it move and be able to "interact" with other cubes. For the interaction I wanted
+to make it a bit more complex by checking for the closest interactable object in
+cases where the player might be in range of 2 interactables simultaneously.
+
 ## High Level Checklist
 
 - [ ] Player character capable of walking and interacting with the game world.
