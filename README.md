@@ -5,6 +5,8 @@
 First set was to set up a git hub repository and create a new Unity project using
 the required 2021.3.2f1 version. After which I wanted to create this readme file
 to help gide me trough the creation process and make it easier.
+Keeping in mind that this is an interview project I've decided to write all the
+code from scratch.
 
 ## High Level Checklist
 
