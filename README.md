@@ -47,10 +47,6 @@ Interact).
 item prices, and the ability to equip purchased outfits, which should be
 visible on the character.
 - [ ] Design a suitable UI for this prototype.
-- [ ] You may use pre-made art assets or create your own for this task.
-- [ ] Please provide 300-word documentation explaining the system, your thought
-process during the interview, and your personal assessment of your
-performance. Attach this as a PDF file to Github.
 
 ## Low Level Checklist
 
@@ -60,7 +56,9 @@ performance. Attach this as a PDF file to Github.
 - [X] Create the project.
 - [X] Create the player movement.
 - [X] Create a basic interaction system.
-- [ ] Add 2D assets to complement the game.
+- [X] Add player sprites and animations.
+- [X] Create a controller to handle the player animations.
+- [ ] Add other 2D assets to complement the game.
 - [ ] Create the store using UI.
 - [ ] Allow the player to purchase clothes.
 - [ ] Allow the player to dress said clothes.
