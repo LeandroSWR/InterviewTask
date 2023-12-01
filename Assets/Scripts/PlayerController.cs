@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -10,7 +9,8 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private NavMeshAgent playerAgent;
-    
+    private Camera mainCamera;
+
     // Movement Keyboard Controls
     private InputAction movementInput;
     private Vector2 movementVector => movementInput.ReadValue<Vector2>().normalized;
@@ -27,28 +27,35 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         playerAgent = GetComponent<NavMeshAgent>();
+        mainCamera = Camera.main;
+
+        InitializePlayerAgent();
+        movementInput = GetComponent<PlayerInput>().actions["Movement"];
+    }
+
+    private void InitializePlayerAgent()
+    {
         playerAgent.updateRotation = false;
         playerAgent.updateUpAxis = false;
         playerAgent.speed = moveSpeed;
         playerAgent.enabled = false;
-        movementInput = GetComponent<PlayerInput>().actions["Movement"];
     }
 
     private void FixedUpdate()
     {
+        ProcessMovement();
+    }
+    private void ProcessMovement()
+    {
         if (holdToMove)
         {
-            ResetMovementVars();
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            Vector2 direction = (mousePosition - (Vector2)transform.position).normalized;
-            rb.velocity = direction * moveSpeed;
+            MoveToMousePosition();
             return;
         }
 
         if (isMoving)
         {
-            ResetMovementVars();
-            rb.velocity = movementVector * moveSpeed;
+            MoveByKeys();
             return;
         }
 
@@ -58,11 +65,27 @@ public class PlayerController : MonoBehaviour
         }
 
         // When we click to move we use the NavMeshAgent to move the player
-        if (!clickToMove || !hasClickToMovePos)
+        if (clickToMove && hasClickToMovePos)
         {
-            return;
+            MoveByClick();
         }
+    }
 
+    private void MoveToMousePosition()
+    {
+        ResetMovementVars();
+        Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        rb.velocity = (mousePosition - (Vector2)transform.position).normalized * moveSpeed;
+    }
+
+    private void MoveByKeys()
+    {
+        ResetMovementVars();
+        rb.velocity = movementVector * moveSpeed;
+    }
+
+    private void MoveByClick()
+    {
         playerAgent.enabled = true;
         rb.isKinematic = true;
 
@@ -84,19 +107,6 @@ public class PlayerController : MonoBehaviour
         clickToMove = false;
     }
 
-    private Vector2 GetClickToMovePosition()
-    {
-        Ray mousePosition = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-
-        if (Physics.Raycast(mousePosition, out RaycastHit hitInfo))
-        {
-            print(hitInfo.point);
-            return new Vector2(hitInfo.point.x, hitInfo.point.y);
-        }
-        
-        return Vector2.zero;
-    }
-
     /// <summary>
     /// When clicking to move set the destination on click
     /// </summary>
@@ -104,20 +114,37 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            clickToMove = true;
-            playerAgent.enabled = true;
-            rb.isKinematic = true;
-
-            clickToMovePos = GetClickToMovePosition();
-            if (clickToMovePos == Vector2.zero)
-            {
-                return;
-            }
-            hasClickToMovePos = true;
-            playerAgent.SetDestination(clickToMovePos);
+            SetClickToMovePosition();
         }
     }
-    
+
+    private void SetClickToMovePosition()
+    {
+        clickToMove = true;
+        playerAgent.enabled = true;
+        rb.isKinematic = true;
+
+        clickToMovePos = GetClickToMovePosition();
+        if (clickToMovePos == Vector2.zero)
+        {
+            return;
+        }
+        hasClickToMovePos = true;
+        playerAgent.SetDestination(clickToMovePos);
+    }
+
+    private Vector2 GetClickToMovePosition()
+    {
+        Ray mousePosition = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+        if (Physics.Raycast(mousePosition, out RaycastHit hitInfo))
+        {
+            return hitInfo.point;
+        }
+
+        return Vector2.zero;
+    }
+
     /// <summary>
     /// Will automatically return to false when the mouse button is released
     /// </summary>
@@ -125,5 +152,4 @@ public class PlayerController : MonoBehaviour
     {
         holdToMove = context.phase == InputActionPhase.Performed;
     }
-        
 }
