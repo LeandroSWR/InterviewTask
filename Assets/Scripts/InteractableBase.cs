@@ -1,18 +1,49 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractableBase : MonoBehaviour
+public abstract class InteractableBase : MonoBehaviour, IInteractable
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private SpriteRenderer outlineSprite;
+    [SerializeField] private Transform interactionLocation;
+    public Vector3 InteractionLocation => interactionLocation.position;
+
+    public string[] InteractOptions => throw new System.NotImplementedException();
+
+    private bool isOutlineActive;
+    public bool IsOutlineActive => isOutlineActive;
+
+    public abstract void Interact(string interactOption);
+
+    public void OutlineInteractable()
     {
-        
+        StopAllCoroutines();
+        isOutlineActive = true;
+        StartCoroutine(UpdateOutline(0f, 1f));
     }
 
-    // Update is called once per frame
-    void Update()
+    public void RemoveInteractableOutline()
     {
+        StopAllCoroutines();
+        isOutlineActive = false;
+        StartCoroutine(UpdateOutline(1f, 0f));
+    }
+
+    private IEnumerator UpdateOutline(float startAlpha, float endAlpha)
+    {
+        float elapsed = 0f;
+        Color color = outlineSprite.color;
         
+        while (elapsed < 0.5f)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(startAlpha, endAlpha, elapsed / 0.5f);
+            color.a = alpha;
+            outlineSprite.color = color;
+            yield return null;
+        }
+
+        // Ensure the final alpha is set to endAlpha
+        color.a = endAlpha;
+        outlineSprite.color = color;
     }
 }

@@ -4,53 +4,99 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteraction : MonoBehaviour
 {
+    // Handle displaying the inertactable note
+    [SerializeField] private GameObject interactCanvas;
+    [SerializeField] private LayerMask interactableLayer;
+
     // Interaction Inputs
-    private InputAction interactAction;
-    private bool tryInteract => interactAction.triggered;
+    private InputAction interactKeyAction;
+    private InputAction interactMouseAction;
+    private bool tryInteractKey => interactKeyAction.triggered;
+    private bool tryInteractMouse => interactMouseAction.triggered;
 
     // Interactable references
     Dictionary<IInteractable, GameObject> interactablesInRange;
     private IInteractable closestInteractable;
+    private IInteractable mouseHoverInteractable;
 
-    // Handle displaying the inertactable note
-    [SerializeField] private GameObject interactCanvas;
+    private Camera mainCamera;
 
     private void Start()
     {
         interactablesInRange = new Dictionary<IInteractable, GameObject>();
-        interactAction = GetComponent<PlayerInput>().actions["Interact"];
+        interactKeyAction = GetComponent<PlayerInput>().actions["Interact"];
+        interactMouseAction = GetComponent<PlayerInput>().actions["InteractMouse"];
+        mainCamera = Camera.main;
     }
 
     private void Update()
     {
+        CheckForMouseOverInteractables();
+
+        HandleClosestInteractable();
+
+        HandleTryToInteract();
+    }
+
+    private void HandleTryToInteract()
+    {
+        // TODO: Handle the interaction depending on the input
+    }
+
+    private void HandleClosestInteractable()
+    {
         if (interactablesInRange.Count == 0)
         {
             interactCanvas.SetActive(false);
+            if (mouseHoverInteractable == null || mouseHoverInteractable != closestInteractable)
+            {
+                closestInteractable?.RemoveInteractableOutline();
+            }
             closestInteractable = null;
+
             return;
         }
 
         closestInteractable = GetClosestInteractable();
 
-        if (closestInteractable == null)
+        if (closestInteractable != null && !closestInteractable.IsOutlineActive && !closestInteractable.IsOutlineActive)
         {
-            interactCanvas.SetActive(false);
-            return;
-        }
-
-        DisplayInteractCanvas();
-
-        if (tryInteract)
-        {
-            closestInteractable.Interact();
+            closestInteractable.OutlineInteractable();
         }
     }
 
-    private void DisplayInteractCanvas()
+    private void CheckForMouseOverInteractables()
     {
-        interactCanvas.SetActive(true);
-        interactCanvas.transform.position = closestInteractable.InteractNoteLocation;
-        interactCanvas.GetComponentInChildren<TMPro.TMP_Text>().text = closestInteractable.InteractNoteText;
+        // Convert mouse position to world position
+        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+
+        // When using mouse to interact we what to ignore the triggers that are used for close player interaction
+        Physics2D.queriesHitTriggers = false;
+        // Cast a ray from the mouse position with the interaction layer mask
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, interactableLayer);
+        Physics2D.queriesHitTriggers = true;
+
+        if (hit.collider != null)
+        {
+            if (mouseHoverInteractable != null && mouseHoverInteractable != hit.collider.GetComponent<IInteractable>())
+            {
+                mouseHoverInteractable.RemoveInteractableOutline();
+            }
+
+            mouseHoverInteractable = hit.collider.GetComponent<IInteractable>();
+            if (!mouseHoverInteractable.IsOutlineActive)
+            {
+                mouseHoverInteractable.OutlineInteractable();
+            }
+        }
+        else
+        {
+            if (closestInteractable == null || closestInteractable != mouseHoverInteractable)
+            {
+                mouseHoverInteractable?.RemoveInteractableOutline();
+                mouseHoverInteractable = null;
+            }
+        }
     }
 
     /// <summary>
@@ -61,11 +107,13 @@ public class PlayerInteraction : MonoBehaviour
     private IInteractable GetClosestInteractable()
     {
         IInteractable retVal = null;
+        float closestDistance = float.MaxValue;
 
-        float prevDistance = float.MaxValue;
-        float currentDistance;
-        foreach (IInteractable interactable in interactablesInRange.Keys)
+        foreach (var pair in new Dictionary<IInteractable, GameObject>(interactablesInRange))
         {
+            IInteractable interactable = pair.Key;
+            GameObject interactableObj = pair.Value;
+
             // This might happen in cases where an object is destryed, cause Unity doesn't trigger the OnTriggerExit2D event
             if (interactable == null)
             {
@@ -73,10 +121,10 @@ public class PlayerInteraction : MonoBehaviour
                 continue;
             }
 
-            currentDistance = Vector2.Distance(transform.position, interactablesInRange[interactable].transform.position);
-            if (currentDistance < prevDistance)
+            float currentDistance = Vector2.Distance(transform.position, interactableObj.transform.position);
+            if (currentDistance < closestDistance)
             {
-                prevDistance = currentDistance;
+                closestDistance = currentDistance;
                 retVal = interactable;
             }
         }

@@ -48,6 +48,14 @@ inform the player he could interact. At first I thought about coding an outliner
 for the project but seeing I'll only have 3 interactables I decided to create
 an outline sprite in Photoshop making the hole process easier.
 
+When starting to code the mouse interactions I wanted to first change the way
+interactables work to be able to display the interaction buttons and display the
+outline. For this I changed the `IInteractable` interface to support 2 more
+methods `OutlineInteractable()` and `RemoveInteractableOutline()` both these
+methods start a coroutine that can Fade In/Out the outline sprite. Having done
+this I had to go back and restructure the code on the `PlayerInteraction` script
+to be able to call for the outline Fade In/Out.
+
 ## High Level Checklist
 
 - [X] Player character capable of walking and interacting with the game world.
