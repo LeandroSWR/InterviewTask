@@ -39,6 +39,10 @@ around depending if the player is moving left or right, the animations where
 set-up is a very basic way using triggers with just 3 options (Idle, Walk,
 Interact).
 
+After setting up the movement I wanted to do a bit of a uplift to the visuals
+I did this using the [2D Fantasy Forest Tileset][2]. I set up a tilemap for the
+ground and used the provided sprites to serve as obstacles and interactables.
+
 ## High Level Checklist
 
 - [X] Player character capable of walking and interacting with the game world.
@@ -58,7 +62,7 @@ visible on the character.
 - [X] Create a basic interaction system.
 - [X] Add player sprites and animations.
 - [X] Create a controller to handle the player animations.
-- [ ] Add other 2D assets to complement the game.
+- [X] Add other 2D assets to complement the game.
 - [ ] Create the store using UI.
 - [ ] Allow the player to purchase clothes.
 - [ ] Allow the player to dress said clothes.
@@ -67,3 +71,4 @@ visible on the character.
 <!-- Reference Links -->
 [0]: https://github.com/h8man/NavMeshPlus
 [1]: https://assetstore.unity.com/packages/2d/characters/mighty-heroes-rogue-2d-fantasy-characters-pack-85770
+[2]: https://assetstore.unity.com/packages/2d/environments/2d-fantasy-forest-tileset-19553
