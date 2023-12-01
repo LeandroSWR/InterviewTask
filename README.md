@@ -22,7 +22,22 @@ enable it / edit it's text when needed so we don't spam the garbage collector.
 
 Update after Diner:
 After looking a bit more into the game I decided to change the movement system to
-be more similar to the one found in the game.
+be more similar to the one found in the game. For this I used the [NavMeshPlus][0]
+extension that allowed me to create a navmesh on a 2d plane, this is used when
+the player clicks the screen to automatically navigate him to the area where he
+click, and will also be used latter to move the player to the correct interaction
+location. This type of movement can be cancelled by pressing the keys to move
+performing another click to move or holding the click button (which makes the
+player follow the mouse).
+
+Today I started by importing the 2D sprites for the player and the shop keeper,
+I decided to go with the [Mighty Heroes (Rogue) 2D Fantasy Characters Pack][1]
+cause of their use of skeletal animation making it easier to swap sprites around
+when the player changes clothes.
+I created a separate script to handle animations and flipping the character
+around depending if the player is moving left or right, the animations where
+set-up is a very basic way using triggers with just 3 options (Idle, Walk,
+Interact).
 
 ## High Level Checklist
 
@@ -50,3 +65,7 @@ performance. Attach this as a PDF file to Github.
 - [ ] Allow the player to purchase clothes.
 - [ ] Allow the player to dress said clothes.
 - [ ] Create a simple start menu for the game.
+
+<!-- Reference Links -->
+[0]: https://github.com/h8man/NavMeshPlus
+[1]: https://assetstore.unity.com/packages/2d/characters/mighty-heroes-rogue-2d-fantasy-characters-pack-85770

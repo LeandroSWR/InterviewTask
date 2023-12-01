@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -14,13 +15,16 @@ public class PlayerController : MonoBehaviour
     // Movement Keyboard Controls
     private InputAction movementInput;
     private Vector2 movementVector => movementInput.ReadValue<Vector2>().normalized;
-    private bool isMoving => movementVector != Vector2.zero;
+    private bool keysToMove => movementVector != Vector2.zero;
 
     // Movement Mouse Controls
     private Vector2 clickToMovePos;
     private bool hasClickToMovePos;
     private bool clickToMove;
     private bool holdToMove;
+
+    public bool IsMoving => keysToMove || clickToMove || holdToMove;
+    public float MovementDirection => rb.isKinematic ? playerAgent.velocity.x : rb.velocity.x;
 
     // Start is called before the first frame update
     void Start()
@@ -53,7 +57,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (isMoving)
+        if (keysToMove)
         {
             MoveByKeys();
             return;
