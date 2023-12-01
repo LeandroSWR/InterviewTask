@@ -120,15 +120,14 @@ public class PlayerController : MonoBehaviour
 
     private void SetClickToMovePosition()
     {
-        clickToMove = true;
-        playerAgent.enabled = true;
-        rb.isKinematic = true;
-
         clickToMovePos = GetClickToMovePosition();
         if (clickToMovePos == Vector2.zero)
         {
             return;
         }
+        clickToMove = true;
+        playerAgent.enabled = true;
+        rb.isKinematic = true;
         hasClickToMovePos = true;
         playerAgent.SetDestination(clickToMovePos);
     }
@@ -136,8 +135,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 GetClickToMovePosition()
     {
         Ray mousePosition = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        RaycastHit2D hitInfo = Physics2D.Raycast(mousePosition.origin, mousePosition.direction);
 
-        if (Physics.Raycast(mousePosition, out RaycastHit hitInfo))
+        if (hitInfo.collider != null && hitInfo.transform.CompareTag("Ground"))
         {
             return hitInfo.point;
         }

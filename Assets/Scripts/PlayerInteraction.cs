@@ -86,10 +86,8 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Triggered with " + collision.gameObject.name);
         if (collision.TryGetComponent(out IInteractable temp))
         {
-            Debug.Log("Added " + collision.gameObject.name + " to interactablesInRange");
             interactablesInRange.Add(temp, collision.gameObject);
         }
     }
@@ -99,7 +97,6 @@ public class PlayerInteraction : MonoBehaviour
         if (collision.TryGetComponent(out IInteractable temp) &&
             interactablesInRange.ContainsKey(temp))
         {
-            Debug.Log("Removed " + collision.gameObject.name + " from interactablesInRange");
             interactablesInRange.Remove(temp);
         }
     }
