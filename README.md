@@ -20,6 +20,10 @@ interaction was, that I could spawn in and destroy when not needed but thinking
 more about this I decided to have the player keep that canvas to him self and
 enable it / edit it's text when needed so we don't spam the garbage collector.
 
+Update after Diner:
+After looking a bit more into the game I decided to change the movement system to
+be more similar to the one found in the game.
+
 ## High Level Checklist
 
 - [X] Player character capable of walking and interacting with the game world.
