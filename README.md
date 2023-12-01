@@ -42,6 +42,11 @@ Interact).
 After setting up the movement I wanted to do a bit of a uplift to the visuals
 I did this using the [2D Fantasy Forest Tileset][2]. I set up a tilemap for the
 ground and used the provided sprites to serve as obstacles and interactables.
+After setting up the map I wanted to move on to enabling mouse interactions but
+for this I would need to display an outline around the interactable object to
+inform the player he could interact. At first I thought about coding an outliner
+for the project but seeing I'll only have 3 interactables I decided to create
+an outline sprite in Photoshop making the hole process easier.
 
 ## High Level Checklist
 
