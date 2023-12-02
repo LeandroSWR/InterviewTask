@@ -26,6 +26,10 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
     {
         StopAllCoroutines();
         isOutlineActive = false;
+
+        if (!gameObject.activeSelf)
+            return;
+
         StartCoroutine(UpdateOutline(1f, 0f));
     }
 

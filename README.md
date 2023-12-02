@@ -64,6 +64,13 @@ buttons are spawned, with a mouse click they spawn around the mouse with the E
 key they spawn around the interactable. After choosing the type of interaction
 the player is moved to the interact location of the object and interacts with it.
 
+Being done with the movement it's finally time to start working on the actual
+interactions, I wanted to work on the coins first so I could setup the store
+after it and already have the player have coins to spend. So I added another
+2D asset for the coin and started working on a script to control the coins UI,
+I also decided to create a simple animation of the number of coins being added
+or spent for some better visuals.
+
 ## High Level Checklist
 
 - [X] Player character capable of walking and interacting with the game world.
