@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d135858fd060f8419d374f34241976a, type: 3}
+  m_Name: High Seas Pirate Shoulder
+  m_EditorClassIdentifier: 
+  clothesName: High Seas Pirate Shoulders
+  displaySprite: {fileID: 21300000, guid: 6295d9afc95168b4b9feb696b3ebc131, type: 3}
+  dressableSprites:
+  - {fileID: 21300000, guid: 805906b1206aa944b99385aa2c600d2f, type: 3}
+  - {fileID: 21300000, guid: 9fe981f3e80b99e429e4399b985d07f4, type: 3}
+  clothingType: 3
+  purchasable: 1
+  purchasePrice: 150
+  sellPrice: 100

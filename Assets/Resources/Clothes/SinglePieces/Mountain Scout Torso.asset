@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d135858fd060f8419d374f34241976a, type: 3}
+  m_Name: Mountain Scout Torso
+  m_EditorClassIdentifier: 
+  clothesName: Mountain Scout Shirt Top
+  displaySprite: {fileID: 21300000, guid: e6df11f05be7d1d4a94d0457e4686ad6, type: 3}
+  dressableSprites:
+  - {fileID: 21300000, guid: 3d9056df586b6024fbc5b9fee2433eef, type: 3}
+  clothingType: 1
+  purchasable: 1
+  purchasePrice: 300
+  sellPrice: 125

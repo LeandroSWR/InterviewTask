@@ -71,6 +71,16 @@ after it and already have the player have coins to spend. So I added another
 I also decided to create a simple animation of the number of coins being added
 or spent for some better visuals.
 
+When starting to build the shop UI I ran into an issue that cause me to
+reconsider the original way I had planed to set it up. The sprites had to much
+empty space and where not centered, fixing this in Unity would break the
+character, so I decided to clump some sprites (Example: The glove sprite is made
+of 4 different sprites) and create a new display sprite for each piece. After
+this I created a new Clothes Scriptable Object this SO would allow me to have
+at hand the display sprite, all the separate sprites that would be added to the
+player, the price for selling and buying and the type of clothing it was to make
+it easier later when we need to apply the clothes to the player.
+
 ## High Level Checklist
 
 - [X] Player character capable of walking and interacting with the game world.
@@ -91,6 +101,7 @@ visible on the character.
 - [X] Add player sprites and animations.
 - [X] Create a controller to handle the player animations.
 - [X] Add other 2D assets to complement the game.
+- [X] Implement the coin system so the player can make purchases.
 - [ ] Create the store using UI.
 - [ ] Allow the player to purchase clothes.
 - [ ] Allow the player to dress said clothes.

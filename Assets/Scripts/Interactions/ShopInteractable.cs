@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopInteractable : MonoBehaviour
+public class ShopInteractable : InteractableBase
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private ShopUI shopUI;
+    [SerializeField] private PlayerController playerController;
+    [SerializeField] private MouseHandler mouseHandler;
 
-    // Update is called once per frame
-    void Update()
+    public override void Interact()
     {
-        
+        // Open Store UI and fill in the clothing pieces
+        playerController.enabled = false;
+        mouseHandler.enabled = false;
+        shopUI.gameObject.SetActive(true);
+        shopUI.FillShop();
     }
 }

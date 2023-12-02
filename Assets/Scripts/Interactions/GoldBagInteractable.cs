@@ -6,7 +6,7 @@ public class GoldBagInteractable : InteractableBase
 
     public override void Interact()
     {
-        playerCoins.AddCoins(5000);
+        playerCoins.AddCoins(8000);
         gameObject.SetActive(false);
     }
 }
