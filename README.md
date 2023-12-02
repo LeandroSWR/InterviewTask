@@ -117,7 +117,7 @@ visible on the character.
 - [X] Allow the player to purchase clothes.
 - [X] Allow the player to sell clothes.
 - [X] Allow the player to change clothes.
-- [ ] Create a simple start menu for the game.
+- [X] Create a simple start menu for the game.
 
 <!-- Reference Links -->
 [0]: https://github.com/h8man/NavMeshPlus
