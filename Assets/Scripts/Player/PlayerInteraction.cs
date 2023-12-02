@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -10,92 +12,126 @@ public class PlayerInteraction : MonoBehaviour
 
     // Interaction Inputs
     private InputAction interactKeyAction;
-    private InputAction interactMouseAction;
     private bool tryInteractKey => interactKeyAction.triggered;
-    private bool tryInteractMouse => interactMouseAction.triggered;
 
     // Interactable references
     Dictionary<IInteractable, GameObject> interactablesInRange;
-    private IInteractable closestInteractable;
+    private IInteractable playerCloseInteractable;
     private IInteractable mouseHoverInteractable;
+    private IInteractable currentInteractable;
 
     private Camera mainCamera;
+    private PlayerController playerController;
 
     private void Start()
     {
         interactablesInRange = new Dictionary<IInteractable, GameObject>();
         interactKeyAction = GetComponent<PlayerInput>().actions["Interact"];
-        interactMouseAction = GetComponent<PlayerInput>().actions["InteractMouse"];
+        playerController = GetComponent<PlayerController>();
         mainCamera = Camera.main;
+        playerController.OnReachInteractable += () => ReachedInteractable();
+        playerController.OnCancelMoveToInteractable += () => CanceledInteraction();
     }
 
     private void Update()
     {
-        CheckForMouseOverInteractables();
-
         HandleClosestInteractable();
 
-        HandleTryToInteract();
+        HandleInteractMenu();
     }
 
-    private void HandleTryToInteract()
+    public void InteractableClicked()
     {
-        // TODO: Handle the interaction depending on the input
+        if (mouseHoverInteractable != null)
+        {
+            Vector3 position = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            EnableInteractMenu(position, mouseHoverInteractable);
+        }
+    }
+
+    private void HandleInteractMenu()
+    {
+        if (tryInteractKey && playerCloseInteractable != null)
+        {
+            Vector3 position = interactablesInRange[playerCloseInteractable].transform.position;
+            EnableInteractMenu(position, playerCloseInteractable);
+        }
+    }
+
+    private void EnableInteractMenu(Vector3 canvasPos, IInteractable interactable)
+    {
+        interactCanvas.SetActive(true);
+        canvasPos.z = -0.1f;// Make sure the world space canvas is in front of evry object
+        interactCanvas.GetComponent<RectTransform>().anchoredPosition = canvasPos;
+        currentInteractable = interactable;
+
+        // Update Button Text
+        interactCanvas.GetComponentInChildren<TMP_Text>().text = interactable.InteractOption;
+
+        // Update Button Functionality
+        Button interactCanvasBtt = interactCanvas.GetComponentInChildren<Button>();
+        interactCanvasBtt.Select();
+        interactCanvasBtt.onClick.RemoveAllListeners();
+        interactCanvasBtt.onClick.AddListener(() => playerController.SetClickToMovePosition(interactable.InteractionLocation, true));
+    }
+
+    private void CanceledInteraction()
+    {
+        currentInteractable = null;
+    }
+
+    private void ReachedInteractable()
+    {
+        currentInteractable.Interact();
+        currentInteractable = null;
     }
 
     private void HandleClosestInteractable()
     {
         if (interactablesInRange.Count == 0)
         {
-            interactCanvas.SetActive(false);
-            if (mouseHoverInteractable == null || mouseHoverInteractable != closestInteractable)
+            if (mouseHoverInteractable == null && interactCanvas.activeSelf)
             {
-                closestInteractable?.RemoveInteractableOutline();
+                interactCanvas.SetActive(false);
             }
-            closestInteractable = null;
+
+            if (mouseHoverInteractable == null || mouseHoverInteractable != playerCloseInteractable)
+            {
+                playerCloseInteractable?.RemoveInteractableOutline();
+            }
+            playerCloseInteractable = null;
 
             return;
         }
 
-        closestInteractable = GetClosestInteractable();
+        playerCloseInteractable = GetClosestInteractable();
 
-        if (closestInteractable != null && !closestInteractable.IsOutlineActive && !closestInteractable.IsOutlineActive)
+        if (playerCloseInteractable != null && !playerCloseInteractable.IsOutlineActive && !playerCloseInteractable.IsOutlineActive)
         {
-            closestInteractable.OutlineInteractable();
+            playerCloseInteractable.OutlineInteractable();
         }
     }
 
-    private void CheckForMouseOverInteractables()
+    public void MouseOverInteractable(IInteractable interactable)
     {
-        // Convert mouse position to world position
-        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-
-        // When using mouse to interact we what to ignore the triggers that are used for close player interaction
-        Physics2D.queriesHitTriggers = false;
-        // Cast a ray from the mouse position with the interaction layer mask
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, interactableLayer);
-        Physics2D.queriesHitTriggers = true;
-
-        if (hit.collider != null)
+        if (mouseHoverInteractable != null && mouseHoverInteractable != interactable)
         {
-            if (mouseHoverInteractable != null && mouseHoverInteractable != hit.collider.GetComponent<IInteractable>())
-            {
-                mouseHoverInteractable.RemoveInteractableOutline();
-            }
-
-            mouseHoverInteractable = hit.collider.GetComponent<IInteractable>();
-            if (!mouseHoverInteractable.IsOutlineActive)
-            {
-                mouseHoverInteractable.OutlineInteractable();
-            }
+            mouseHoverInteractable.RemoveInteractableOutline();
         }
-        else
+
+        mouseHoverInteractable = interactable;
+        if (!mouseHoverInteractable.IsOutlineActive)
         {
-            if (closestInteractable == null || closestInteractable != mouseHoverInteractable)
-            {
-                mouseHoverInteractable?.RemoveInteractableOutline();
-                mouseHoverInteractable = null;
-            }
+            mouseHoverInteractable.OutlineInteractable();
+        }
+    }
+
+    public void MouseExitInteractable()
+    {
+        if (playerCloseInteractable == null || playerCloseInteractable != mouseHoverInteractable)
+        {
+            mouseHoverInteractable?.RemoveInteractableOutline();
+            mouseHoverInteractable = null;
         }
     }
 

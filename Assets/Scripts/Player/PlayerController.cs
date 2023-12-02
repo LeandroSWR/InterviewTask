@@ -22,9 +22,14 @@ public class PlayerController : MonoBehaviour
     private bool hasClickToMovePos;
     private bool clickToMove;
     private bool holdToMove;
+    private bool movingToInteractable;
+    public bool isMovingInteractable => movingToInteractable;
 
     public bool IsMoving => keysToMove || clickToMove || holdToMove;
     public float MovementDirection => rb.isKinematic ? playerAgent.velocity.x : rb.velocity.x;
+
+    public Action OnReachInteractable;
+    public Action OnCancelMoveToInteractable;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +54,7 @@ public class PlayerController : MonoBehaviour
     {
         ProcessMovement();
     }
+
     private void ProcessMovement()
     {
         if (holdToMove)
@@ -88,22 +94,16 @@ public class PlayerController : MonoBehaviour
         rb.velocity = movementVector * moveSpeed;
     }
 
-    private void MoveByClick()
-    {
-        playerAgent.enabled = true;
-        rb.isKinematic = true;
-
-        if (Vector2.Distance(transform.position, clickToMovePos) <= playerAgent.stoppingDistance)
-        {
-            ResetMovementVars();
-        }
-    }
-
     private void ResetMovementVars()
     {
         if (playerAgent.enabled)
         {
             playerAgent.ResetPath();
+        }
+        if (movingToInteractable)
+        {
+            OnCancelMoveToInteractable?.Invoke();
+            movingToInteractable = false;
         }
         playerAgent.enabled = false;
         hasClickToMovePos = false;
@@ -111,20 +111,10 @@ public class PlayerController : MonoBehaviour
         clickToMove = false;
     }
 
-    /// <summary>
-    /// When clicking to move set the destination on click
-    /// </summary>
-    public void OnClickToMove(InputAction.CallbackContext context)
+    public void SetClickToMovePosition(Vector2 movePos, bool moveToInteractable)
     {
-        if (context.phase == InputActionPhase.Performed)
-        {
-            SetClickToMovePosition();
-        }
-    }
-
-    private void SetClickToMovePosition()
-    {
-        clickToMovePos = GetClickToMovePosition();
+        movingToInteractable = moveToInteractable;
+        clickToMovePos = movePos;
         if (clickToMovePos == Vector2.zero)
         {
             return;
@@ -136,17 +126,20 @@ public class PlayerController : MonoBehaviour
         playerAgent.SetDestination(clickToMovePos);
     }
 
-    private Vector2 GetClickToMovePosition()
+    private void MoveByClick()
     {
-        Ray mousePosition = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        RaycastHit2D hitInfo = Physics2D.Raycast(mousePosition.origin, mousePosition.direction);
+        playerAgent.enabled = true;
+        rb.isKinematic = true;
 
-        if (hitInfo.collider != null && hitInfo.transform.CompareTag("Ground"))
+        if (Vector2.Distance(transform.position, clickToMovePos) <= playerAgent.stoppingDistance)
         {
-            return hitInfo.point;
-        }
+            if (movingToInteractable)
+            {
+                OnReachInteractable?.Invoke();
+            }
 
-        return Vector2.zero;
+            ResetMovementVars();
+        }
     }
 
     /// <summary>

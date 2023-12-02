@@ -7,12 +7,13 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
     [SerializeField] private Transform interactionLocation;
     public Vector3 InteractionLocation => interactionLocation.position;
 
-    public string[] InteractOptions => throw new System.NotImplementedException();
-
+    [SerializeField] public string interactOption;
+    public string InteractOption => interactOption;
+    
     private bool isOutlineActive;
     public bool IsOutlineActive => isOutlineActive;
 
-    public abstract void Interact(string interactOption);
+    public abstract void Interact();
 
     public void OutlineInteractable()
     {

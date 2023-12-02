@@ -56,6 +56,14 @@ methods start a coroutine that can Fade In/Out the outline sprite. Having done
 this I had to go back and restructure the code on the `PlayerInteraction` script
 to be able to call for the outline Fade In/Out.
 
+I really wanted to mimic the style of the game so I went with 2 different types
+of interactions both do the same but in different ways. Both Clicking the
+interactable or being close to it and pressing E will spawn the buttons of the
+available interactions with that object, the only difference being where the
+buttons are spawned, with a mouse click they spawn around the mouse with the E
+key they spawn around the interactable. After choosing the type of interaction
+the player is moved to the interact location of the object and interacts with it.
+
 ## High Level Checklist
 
 - [X] Player character capable of walking and interacting with the game world.

@@ -3,8 +3,7 @@ using UnityEngine;
 public class PlayerAnimationController : MonoBehaviour
 {
     // Hashes
-    private readonly int walkTrigger = Animator.StringToHash("Walk");
-    private readonly int idleTrigger = Animator.StringToHash("Idle");
+    private readonly int isWalking = Animator.StringToHash("Walk");
     private readonly int interactTrigger = Animator.StringToHash("Interact");
 
     private Animator animator;
@@ -28,28 +27,17 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void UpdateMovementAnimation()
     {
-        if (playerController.IsMoving && !wasMoving)
-        {
-            wasIdle = false;
-            wasMoving = true;
-            animator.SetTrigger(walkTrigger);
-        }
-        else if (!playerController.IsMoving && !wasIdle)
-        {
-            wasIdle = true;
-            wasMoving = false;
-            animator.SetTrigger(idleTrigger);
-        }
+        animator.SetBool(isWalking, playerController.IsMoving);
     }
 
     private void UpdateSpriteDirection()
     {
-        if (playerController.MovementDirection < 0 && !flipedX)
+        if (playerController.MovementDirection < -1.2f && !flipedX)
         {
             flipedX = true;
             transform.parent.localScale = new Vector3(-1, 1, 1);
         }
-        else if (playerController.MovementDirection > 0 && flipedX)
+        else if (playerController.MovementDirection > 1.2f && flipedX)
         {
             flipedX = false;
             transform.parent.localScale = new Vector3(1, 1, 1);
