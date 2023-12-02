@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -88,7 +86,7 @@ public class MouseHandler : MonoBehaviour
                 OnMouseClickGround?.Invoke(hit.point, false);
             }
 
-            if (interactCanvas.activeSelf)
+            if (mouseClicked && interactCanvas.activeSelf)
             {
                 interactCanvas.SetActive(false);
             }

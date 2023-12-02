@@ -510,6 +510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d789f2799c1ed740b5a331220869a81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  priceObj: {fileID: 8122316615507443744}
   Price: {fileID: 8122316616381291034}
   clothesImage: {fileID: 8122316617275482517}
 --- !u!1 &8122316617275482519

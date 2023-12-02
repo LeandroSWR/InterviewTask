@@ -88,14 +88,18 @@ clothes inside the basket (Can be for purchase or sale). Both these lists are
 manipulated in the same way so it made sense to do it this way considering the
 time I have left.
 
+I took a similar approach in the Wardrobe UI, the code is very similar to what
+was done in the Buy/Sell UI, this is because the functionally is almost the same
+with the exception of equipping clothing items.
+
 ## High Level Checklist
 
 - [X] Player character capable of walking and interacting with the game world.
-- [ ] Functional clothes shop within a top-down view game like Stardew Valley.
-- [ ] Required features: shopkeeper interaction, buying/selling items, item
+- [X] Functional clothes shop within a top-down view game like Stardew Valley.
+- [X] Required features: shopkeeper interaction, buying/selling items, item
 icons, item prices, and the ability to equip purchased outfits, which should be
 visible on the character.
-- [ ] Design a suitable UI for this prototype.
+- [X] Design a suitable UI for this prototype.
 
 ## Low Level Checklist
 
@@ -109,9 +113,10 @@ visible on the character.
 - [X] Create a controller to handle the player animations.
 - [X] Add other 2D assets to complement the game.
 - [X] Implement the coin system so the player can make purchases.
-- [ ] Create the store using UI.
-- [ ] Allow the player to purchase clothes.
-- [ ] Allow the player to dress said clothes.
+- [X] Create the store using UI.
+- [X] Allow the player to purchase clothes.
+- [X] Allow the player to sell clothes.
+- [X] Allow the player to change clothes.
 - [ ] Create a simple start menu for the game.
 
 <!-- Reference Links -->

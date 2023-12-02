@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class ShopUI : MonoBehaviour
@@ -20,8 +21,7 @@ public class ShopUI : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject clothesPrefab;
     [SerializeField] private PlayerCoins playerCoins;
-    [SerializeField] private MouseHandler mouseHandler;
-    [SerializeField] private PlayerController playerController;
+    [SerializeField] private PlayerInput playerInput;
     [SerializeField] private ShopClothes shop;
     [SerializeField] private PlayerWardrobe playerWardrobe;
 
@@ -95,7 +95,14 @@ public class ShopUI : MonoBehaviour
                 // Spawn a copy of the clothes in the basket
                 parent = clothesManipulator is ShopClothes ? clothesBasketParent.transform : clothesSellBasketParent.transform;
                 GameObject basketClothes = Instantiate(clothesPrefab, parent);
-                basketClothes.GetComponent<ClothingPieceUI>().InitializeClothes(tempClothing);
+                if (clothesManipulator is ShopClothes)
+                {
+                    basketClothes.GetComponent<ClothingPieceUI>().InitializeClothes(tempClothing);
+                }
+                else
+                {
+                    basketClothes.GetComponent<ClothingPieceUI>().InitializeClothes(tempClothing, true);
+                }
 
                 // Add a listener to the basket clothes
                 Button basketButton = basketClothes.GetComponent<Button>();
@@ -154,8 +161,7 @@ public class ShopUI : MonoBehaviour
 
     public void CloseShop()
     {
-        playerController.enabled = true;
-        mouseHandler.enabled = true;
+        playerInput.enabled = true;
         shop.EmptyBasket();
         playerWardrobe.EmptyBasket();
         gameObject.SetActive(false);
