@@ -81,6 +81,13 @@ at hand the display sprite, all the separate sprites that would be added to the
 player, the price for selling and buying and the type of clothing it was to make
 it easier later when we need to apply the clothes to the player.
 
+Since we need to be able to Buy and Sell clothes I decided to go with the
+Strategy Pattern for the player's wardrobe and the shop, cause they'll function
+in very similar ways. There's a List of Available clothes and List of the
+clothes inside the basket (Can be for purchase or sale). Both these lists are
+manipulated in the same way so it made sense to do it this way considering the
+time I have left.
+
 ## High Level Checklist
 
 - [X] Player character capable of walking and interacting with the game world.

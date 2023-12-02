@@ -1,22 +1,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerWardrobe : MonoBehaviour
+public class PlayerWardrobe : ClothesManipulatorBase
 {
-    [SerializeField] private List<ClothingPiece> clothingPieces;
+    [SerializeField] private PlayerCoins playerCoins;
+    [SerializeField] private ShopClothes shop;
 
-    public void AddClothing(ClothingPiece clothingPiece)
-    {           
-        clothingPieces.Add(clothingPiece);
+    private List<ClothingPiece> dressedClothes;
+    
+    protected override void Start()
+    {
+        base.Start();
+
+        isShop = false;
+
+        dressedClothes = availableClothes;
     }
 
-    public void RemoveClothing(ClothingPiece clothingPiece)
+    public override void FinalizeBusiness()
     {
-        if (!clothingPiece.Purchasable)
-        {
-            return;
-        }
+        playerCoins.AddCoins(basketTotal);
 
-        clothingPieces.Remove(clothingPiece);
+        basketTotal = 0;
+        for (int i = clothesInBasket.Count - 1; i >= 0; i--)
+        {
+            shop.AddClothing(clothesInBasket[i]);
+            clothesInBasket.Remove(clothesInBasket[i]);
+        }
     }
 }
