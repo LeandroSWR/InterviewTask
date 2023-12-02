@@ -15,6 +15,10 @@ public class MouseHandler : MonoBehaviour
     
     private bool mouseOverInteractable;
     private bool mouseClicked;
+    private bool interactCanvasActive;
+
+    private float recentClickTime = 0;
+    private bool recentClick = false;
 
     private void Start()
     {
@@ -23,7 +27,26 @@ public class MouseHandler : MonoBehaviour
 
     private void Update()
     {
+        if (interactCanvasActive && !interactCanvas.activeSelf)
+        {
+            interactCanvasActive = false;
+            recentClick = true;
+        }
+
         CheckMouseOver();
+
+        if (recentClick)
+        {
+            recentClickTime += Time.deltaTime;
+
+            if (recentClickTime > 0.25f)
+            {
+                recentClick = false;
+                recentClickTime = 0f;
+            }
+        }
+
+        interactCanvasActive = interactCanvas.activeSelf;
     }
 
     public void OnMouseClick(InputAction.CallbackContext context)
@@ -36,6 +59,12 @@ public class MouseHandler : MonoBehaviour
 
     private void CheckMouseOver()
     {
+        if (recentClick)
+        {
+            mouseClicked = false;
+            return;
+        }
+
         // Convert mouse position to world position
         Vector2 mousePos = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 

@@ -70,7 +70,7 @@ public class ShopUI : MonoBehaviour
         // Fill the shop
         foreach (ClothingPiece clothingPiece in clothesManipulator.AvailableClothes)
         {
-            if (!clothingPiece.Purchasable)
+            if (!clothingPiece.Purchasable || playerWardrobe.DressedClothes.Contains(clothingPiece))
             {
                 continue;
             }
@@ -80,7 +80,7 @@ public class ShopUI : MonoBehaviour
 
             Transform parent = clothesManipulator is ShopClothes ? clothesShopParent.transform : clothesSellParent.transform;
             GameObject clothes = Instantiate(clothesPrefab, parent);
-            clothes.GetComponent<ClothingPieceUI>().InitializeClothes(tempClothing);
+            clothes.GetComponent<ClothingPieceUI>().InitializeClothes(tempClothing, clothesManipulator is PlayerWardrobe);
             Button button = clothes.GetComponent<Button>();
 
             button.onClick.AddListener(() =>
@@ -95,14 +95,7 @@ public class ShopUI : MonoBehaviour
                 // Spawn a copy of the clothes in the basket
                 parent = clothesManipulator is ShopClothes ? clothesBasketParent.transform : clothesSellBasketParent.transform;
                 GameObject basketClothes = Instantiate(clothesPrefab, parent);
-                if (clothesManipulator is ShopClothes)
-                {
-                    basketClothes.GetComponent<ClothingPieceUI>().InitializeClothes(tempClothing);
-                }
-                else
-                {
-                    basketClothes.GetComponent<ClothingPieceUI>().InitializeClothes(tempClothing, true);
-                }
+                basketClothes.GetComponent<ClothingPieceUI>().InitializeClothes(tempClothing, clothesManipulator is PlayerWardrobe);
 
                 // Add a listener to the basket clothes
                 Button basketButton = basketClothes.GetComponent<Button>();

@@ -25,7 +25,6 @@ public class PlayerWardrobe : ClothesManipulatorBase
 
         isShop = false;
 
-        print("PlayerWardrobe Start");
         dressedClothes = new List<ClothingPiece>(availableClothes);
 
         clothingTypeToSprites = new Dictionary<ClothingType, SpriteRenderer[]>

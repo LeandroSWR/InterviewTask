@@ -65,7 +65,7 @@ public class WardrobeUI : MonoBehaviour
             ClothingPiece tempClothing = clothingPiece;
 
             GameObject clothes = Instantiate(clothesPrefab, clothesParent.transform);
-            clothes.GetComponent<ClothingPieceUI>().InitializeClothes(tempClothing);
+            clothes.GetComponent<ClothingPieceUI>().InitializeWardrobeClothes(tempClothing);
             Button button = clothes.GetComponent<Button>();
 
             // Disable the button if the player already has the clothing piece

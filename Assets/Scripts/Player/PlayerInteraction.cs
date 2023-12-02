@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class PlayerInteraction : MonoBehaviour
     // Handle displaying the inertactable note
     [SerializeField] private GameObject interactCanvas;
     [SerializeField] private LayerMask interactableLayer;
+    [SerializeField] private float detectionRadius = 1f;
 
     // Interaction Inputs
     private InputAction interactKeyAction;
@@ -19,6 +21,9 @@ public class PlayerInteraction : MonoBehaviour
     private IInteractable playerCloseInteractable;
     private IInteractable mouseHoverInteractable;
     private IInteractable currentInteractable;
+
+    private float recentClickTime = 0;
+    private bool recentClick = false;
 
     private Camera mainCamera;
     private PlayerController playerController;
@@ -31,6 +36,8 @@ public class PlayerInteraction : MonoBehaviour
         mainCamera = Camera.main;
         playerController.OnReachInteractable += () => ReachedInteractable();
         playerController.OnCancelMoveToInteractable += () => CanceledInteraction();
+
+        StartCoroutine(CheckForInteractables());
     }
 
     private void Update()
@@ -38,11 +45,45 @@ public class PlayerInteraction : MonoBehaviour
         HandleClosestInteractable();
 
         HandleInteractMenu();
+
+        if (recentClick)
+        {
+            recentClickTime += Time.deltaTime;
+
+            if (recentClickTime > 0.25f)
+            {
+                recentClick = false;
+                recentClickTime = 0f;
+            }
+        }
+    }
+
+    private IEnumerator CheckForInteractables()
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.25f);
+        while (true)
+        {
+            interactablesInRange.Clear();
+            Collider2D[] hitCollider = Physics2D.OverlapCircleAll(transform.position, detectionRadius, interactableLayer);
+            foreach (Collider2D collider in hitCollider)
+            {
+                if (!collider.TryGetComponent(out IInteractable interactable))
+                {
+                    continue;
+                }
+
+                if (!interactablesInRange.ContainsKey(interactable))
+                {
+                    interactablesInRange.Add(interactable, collider.gameObject);
+                }
+            }
+            yield return wait;
+        }
     }
 
     public void InteractableClicked()
     {
-        if (mouseHoverInteractable != null)
+        if (mouseHoverInteractable != null && !recentClick)
         {
             Vector3 position = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             EnableInteractMenu(position, mouseHoverInteractable);
@@ -72,7 +113,11 @@ public class PlayerInteraction : MonoBehaviour
         Button interactCanvasBtt = interactCanvas.GetComponentInChildren<Button>();
         interactCanvasBtt.Select();
         interactCanvasBtt.onClick.RemoveAllListeners();
-        interactCanvasBtt.onClick.AddListener(() => playerController.SetClickToMovePosition(interactable.InteractionLocation, true));
+        interactCanvasBtt.onClick.AddListener(() => {
+            playerController.SetClickToMovePosition(interactable.InteractionLocation, true);
+            interactCanvas.SetActive(false);
+            recentClick = true;
+            });
     }
 
     private void CanceledInteraction()
@@ -90,11 +135,6 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (interactablesInRange.Count == 0)
         {
-            if (mouseHoverInteractable == null && interactCanvas.activeSelf)
-            {
-                interactCanvas.SetActive(false);
-            }
-
             if (mouseHoverInteractable == null || mouseHoverInteractable != playerCloseInteractable)
             {
                 playerCloseInteractable?.RemoveInteractableOutline();
@@ -117,6 +157,11 @@ public class PlayerInteraction : MonoBehaviour
         if (mouseHoverInteractable != null && mouseHoverInteractable != interactable)
         {
             mouseHoverInteractable.RemoveInteractableOutline();
+        }
+
+        if (mouseHoverInteractable == interactable)
+        {
+            return;
         }
 
         mouseHoverInteractable = interactable;
@@ -166,22 +211,5 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         return retVal;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.TryGetComponent(out IInteractable temp))
-        {
-            interactablesInRange.Add(temp, collision.gameObject);
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.TryGetComponent(out IInteractable temp) &&
-            interactablesInRange.ContainsKey(temp))
-        {
-            interactablesInRange.Remove(temp);
-        }
     }
 }
